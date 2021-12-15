@@ -30,11 +30,12 @@ When running a simulation, monitor the host machine closely. Check utilisation o
 ## Requirements Details
 
 install latex
+```sh
 sudo apt-get install texlive-latex-extra
-
-install R packages with sudo manually
-
-change python pandas, numpy .. dependecies version
+```
+install R packages needs sudo
 
 python version used is 3.8
+
 os: linux 20.03.3 LTS
+

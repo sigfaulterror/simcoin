@@ -101,3 +101,5 @@ datadirs
 
 # Intellij
 *.iml
+# VScode
+.vscode/
