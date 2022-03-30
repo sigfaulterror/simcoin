@@ -27,3 +27,12 @@ When running a simulation, monitor the host machine closely. Check utilisation o
 * Sustaining different blockchain projects such as Ethereum or Litecoin.
 * Using the [ELK-Stack](https://www.elastic.co/products) to parse, store and analyse the log files.
 * Using [Kubernetes](https://kubernetes.io/) to orchestrate containers
+## Install latex
+```sh
+sudo apt-get install texlive-latex-extra
+```
+install R packages needs sudo
+
+python version used is 3.8
+
+os: linux 20.03.3 LTS
