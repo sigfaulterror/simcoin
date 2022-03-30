@@ -9,6 +9,9 @@ file_chunk_size = 10 * 1024 * 1024  # 10MB
 ip_range = "240.0.0.0/4"
 ip_zones = '240.{}.0.0/16'
 
+relay_ip = "240.0.0.1"
+relay_port = 1234
+
 standard_image = 'simcoin/bitcoin:v15.0.1'
 number_of_node_group_arguments = 4
 
