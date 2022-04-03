@@ -89,9 +89,6 @@ class  TransactionMalleability:
             try:
                 return self._rpc_connection.call(args[0], *args[1:])
             except:
-                #print('Could not execute RPC-call={} on node={} because of error={}.'
-                #                  ' Reconnecting and retrying, {} retries left'
-                #                  .format(args[0], self._name,  error, retry))
                 retry -= 1
                 self.connect_to_rpc()
         raise Exception('Could not execute RPC-call={} on node {}'.format(args[0], self._name))
