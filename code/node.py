@@ -221,8 +221,7 @@ class BitcoinNode(Node):
             s.sendall(bytes(b2x(tx_serialized),'utf8') + b'\n')
             s.close()
         except socket.error as exc:
-            print(
-                "[bold red] [-] [/bold red] Error connecting to mallicious node socket.error : %s" % exc)
+            pass
     #My change finishes here
 
     def generate_spent_to_address(self):
