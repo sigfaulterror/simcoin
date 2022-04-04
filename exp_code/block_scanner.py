@@ -29,7 +29,7 @@ class  TransactionMalleability:
             "rpc_user" : rpc_user,
             "rpc_password" : rpc_password,
             "rpc_port" : rpc_port,
-            "rpc_timeout" : 3600,
+            "rpc_timeout" : 5,
             "rpc_host": rpc_host
         }
 
@@ -103,8 +103,10 @@ class  TransactionMalleability:
         while True:
             self.wait_until_rpc_ready()
             count = self._rpc_connection.getblockcount()
-            if self.block_count >= count:
+            if self.block_count == count:
                 time.sleep(1)
+            elif self.block_count > count:
+                self.block_count = 0
             for index in range(self.block_count + 1, count + 1):
                 block_hash = self._rpc_connection.getblockhash(index)
                 log("Scanning block_hash: %s" %self.big_2_little_endian(block_hash).hex(), INFO)

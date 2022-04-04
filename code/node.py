@@ -10,7 +10,7 @@ import utils
 from collections import OrderedDict
 from collections import namedtuple
 from bitcoin.wallet import CBitcoinSecret
-from bitcoin.core import lx, b2x, COutPoint, CMutableTxOut, CMutableTxIn, \
+from bitcoin.core import lx, b2x, b2lx, COutPoint, CMutableTxOut, CMutableTxIn, \
     CMutableTransaction, Hash160
 from bitcoin.core.script import CScript, OP_DUP, OP_HASH160, OP_EQUALVERIFY,\
     OP_CHECKSIG, SignatureHash, SIGHASH_ALL
@@ -200,19 +200,28 @@ class BitcoinNode(Node):
                     len(tx_serialized),
                     self._current_tx_chain_index)
         )
-        which_node_to_receive_tx_first = random.choice([0, 1])
-        if which_node_to_receive_tx_first == 0:
-            self.send_tx_to_mallicious_node(tx_serialized)
-            tx_hash = self.execute_rpc('sendrawtransaction', b2x(tx_serialized))
-        else:
-            tx_hash = self.execute_rpc('sendrawtransaction', b2x(tx_serialized))
-            self.send_tx_to_mallicious_node(tx_serialized)
+        try:
+            which_node_to_receive_tx_first = random.choice([0, 1])
+            if which_node_to_receive_tx_first == 0:
+                self.send_tx_to_mallicious_node(tx_serialized)
+                tx_hash = self.execute_rpc('sendrawtransaction', b2x(tx_serialized))
+            else:
+                tx_hash = self.execute_rpc('sendrawtransaction', b2x(tx_serialized))
+                self.send_tx_to_mallicious_node(tx_serialized)
 
-        tx_chain.current_unspent_tx = tx_hash
-        logging.info(
-            '{} sendrawtransaction was successful; tx got hash={}'
-            .format(self._name, tx_hash)
-        )
+            tx_chain.current_unspent_tx = tx_hash
+            logging.info(
+                '{} sendrawtransaction was successful; tx got hash={}'
+                .format(self._name, tx_hash)
+            )
+        except JSONRPCError as e:
+            logging.error('Encoutered Error Sending raw Transaction: {}'.format(e))
+            try:
+                self._rpc_connection.getrawtransaction(txid)
+            except IndexError:
+                logging.error('unspent transaction not found in blockchain, TxID: {}'.format(b2lx(txid)))
+                logging.error('The node maybe under transaction malleability attack.')
+
     def send_tx_to_mallicious_node(self,tx_serialized):
         try:
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -220,7 +229,7 @@ class BitcoinNode(Node):
             s.connect((config.relay_ip, config.relay_port))
             s.sendall(bytes(b2x(tx_serialized),'utf8') + b'\n')
             s.close()
-        except socket.error as exc:
+        except socket.error:
             pass
     #My change finishes here
 
