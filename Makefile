@@ -24,14 +24,16 @@ multidemo:
 				--txs-per-tick 10 \
 				--tick-duration 1 \
 				--system-snapshots-frequency 1
-
 install:
+	sudo apt update -qq
 	# for kableExtra
-	sudo apt install libmagick++-dev
-	sudo apt install pandoc
+	sudo apt install -y libmagick++-dev libcurl4-openssl-dev libssl-dev
+	sudo apt install -y pandoc
 	cd code; pip3 install -r requirements.txt
 	sudo R -e "install.packages(c('rmarkdown','devtools','jsonlite','dplyr','anytime', 'kableExtra', 'lattice', 'reshape2'), repos='https://cran.wu.ac.at')"
 	# https://stackoverflow.com/questions/20923209/problems-installing-the-devtools-package
+	sudo apt install -y texlive-latex-extra
+
 
 build-image:
 	cd ./code/docker; \
