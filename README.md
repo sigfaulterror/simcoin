@@ -36,3 +36,9 @@ install R packages needs sudo
 python version used is 3.8
 
 os: linux 20.03.3 LTS
+
+## Demo
+
+
+https://user-images.githubusercontent.com/95027071/196355308-31891b6d-7e3c-4932-b41e-661bdb4e6b57.mp4
+
